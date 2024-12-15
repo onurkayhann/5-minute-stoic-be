@@ -1,4 +1,25 @@
 package com.onurkayhann.__minute_stoic_be.controller
 
-class CustomUserController {
+import com.onurkayhann.__minute_stoic_be.model.CustomUser
+import com.onurkayhann.__minute_stoic_be.repository.CustomUserRepository
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
+
+@RestController
+@RequestMapping("/user")
+class CustomUserController(
+    @Autowired private val customUserRepository: CustomUserRepository
+) {
+
+    @PostMapping
+    fun createUser(@RequestBody customUser: CustomUser): ResponseEntity<String> {
+
+        customUserRepository.save(customUser)
+
+        return ResponseEntity.status(201).body("User Created")
+    }
 }

@@ -7,7 +7,6 @@ import jakarta.persistence.*
 class CustomUser(
     val username: String = "",
     val password: String = "",
-    val isLoggedIn: Boolean = false,
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
