@@ -1,6 +1,7 @@
 package com.onurkayhann.__minute_stoic_be.controller
 
 import com.onurkayhann.__minute_stoic_be.model.CustomUser
+import com.onurkayhann.__minute_stoic_be.model.LoginRequest
 import com.onurkayhann.__minute_stoic_be.model.StoicJournal
 import com.onurkayhann.__minute_stoic_be.repository.CustomUserRepository
 import org.springframework.beans.factory.annotation.Autowired
@@ -52,5 +53,19 @@ class CustomUserController(
         user.addJournal(journal)
         customUserRepository.save(user)
         return ResponseEntity.ok("Journal added successfully")
+    }
+
+    @PostMapping("/login")
+    fun login(@RequestBody loginRequest: LoginRequest): ResponseEntity<String> {
+        val user = customUserRepository.findByUsername(loginRequest.username)
+        if (user == null) {
+            return ResponseEntity.status(404).body("User not found")
+        }
+
+        if (passwordEncoder.matches(loginRequest.password, user.password)) {
+            return ResponseEntity.ok("Login successful")
+        } else {
+            return ResponseEntity.status(401).body("Invalid credentials")
+        }
     }
 }
