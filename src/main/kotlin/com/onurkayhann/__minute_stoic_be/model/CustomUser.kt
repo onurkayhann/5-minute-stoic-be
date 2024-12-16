@@ -5,7 +5,7 @@ import jakarta.persistence.*
 
 @Entity
 @Table(name = "StoicUser")
-class CustomUser(
+data class CustomUser(
     val username: String = "",
     val password: String = "",
 
