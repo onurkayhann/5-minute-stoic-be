@@ -4,16 +4,19 @@ import com.onurkayhann.__minute_stoic_be.model.CustomUser
 import com.onurkayhann.__minute_stoic_be.model.LoginRequest
 import com.onurkayhann.__minute_stoic_be.model.StoicJournal
 import com.onurkayhann.__minute_stoic_be.repository.CustomUserRepository
+import jakarta.validation.Valid
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/user")
 class CustomUserController(
     @Autowired private val customUserRepository: CustomUserRepository,
-    @Autowired private val passwordEncoder: BCryptPasswordEncoder
+    @Autowired private val passwordEncoder: PasswordEncoder
 ) {
 
     @GetMapping("/all")
@@ -29,15 +32,20 @@ class CustomUserController(
     }
 
     @PostMapping
-    fun createUser(@RequestBody customUser: CustomUser): ResponseEntity<String> {
-        // Hash the password and create a new user object
-        val bcryptUser = CustomUser(customUser.username, passwordEncoder.encode(customUser.password))
+    fun saveUser(
+        @Validated @RequestBody newUser: CustomUser
+    ): ResponseEntity<String> {
 
-        // Save the new user with the hashed password
+        // password = 123
+        val bcryptUser = CustomUser(
+            newUser.username,
+            passwordEncoder.encode(newUser.password) // 123 -> bcrypt
+        )
+
+        // Save
         customUserRepository.save(bcryptUser)
 
-        // Return the response
-        return ResponseEntity.status(201).body("User Created!")
+        return ResponseEntity.status(201).body("User was successfully created")
     }
 
     @PostMapping("/{userId}/journals")

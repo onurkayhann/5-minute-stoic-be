@@ -9,12 +9,12 @@ import jakarta.validation.constraints.Size
 @Table(name = "StoicUser")
 data class CustomUser(
 
-    @NotEmpty
-    @Size(min = 2, max = 16)
+    @field:NotEmpty
+    @field:Size(min = 7, max = 32)
     val username: String = "",
 
-    @NotEmpty
-    @Size(min = 7, max = 30)
+    @field:NotEmpty
+    @field:Size(min = 7, max = 77)
     val password: String = "",
 
     @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true)
