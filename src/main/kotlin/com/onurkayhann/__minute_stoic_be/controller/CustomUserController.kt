@@ -31,7 +31,7 @@ class CustomUserController(
     @PostMapping
     fun createUser(@RequestBody customUser: CustomUser): ResponseEntity<String> {
         // Hash the password and create a new user object
-        val bcryptUser = customUser.copy(password = passwordEncoder.encode(customUser.password))
+        val bcryptUser = CustomUser(customUser.username, passwordEncoder.encode(customUser.password))
 
         // Save the new user with the hashed password
         customUserRepository.save(bcryptUser)
