@@ -61,6 +61,20 @@ class CustomUserController(
         return ResponseEntity.ok("Journal added successfully")
     }
 
+    @GetMapping("/{userId}/journals")
+    fun getJournalsByUserId(@PathVariable userId: Long): ResponseEntity<List<StoicJournal>> {
+        val user = customUserRepository.findById(userId).orElseThrow {
+            RuntimeException("User not found")
+        }
+        return ResponseEntity.ok(user.journals)
+    }
+
+    @GetMapping("/journals/{username}")
+    fun getJournalsByUsername(@PathVariable username: String): ResponseEntity<List<StoicJournal>> {
+        val user = customUserRepository.findByUsername(username) ?: throw RuntimeException("User not found")
+        return ResponseEntity.ok(user.journals)
+    }
+
     @PostMapping("/login")
     fun login(@RequestBody loginRequest: LoginRequest): ResponseEntity<String> {
         val user = customUserRepository.findByUsername(loginRequest.username)
