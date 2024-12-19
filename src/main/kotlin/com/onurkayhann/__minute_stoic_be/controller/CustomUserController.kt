@@ -61,6 +61,17 @@ class CustomUserController(
         return ResponseEntity.ok("Journal added successfully")
     }
 
+    @PostMapping("/journals/{username}")
+    fun addJournalByUsername(
+        @PathVariable username: String,
+        @RequestBody journal: StoicJournal
+    ): ResponseEntity<String> {
+        val user = customUserRepository.findByUsername(username) ?: throw RuntimeException("User not found")
+        user.addJournal(journal)
+        customUserRepository.save(user)
+        return ResponseEntity.ok("Journal added successfully")
+    }
+
     @GetMapping("/{userId}/journals")
     fun getJournalsByUserId(@PathVariable userId: Long): ResponseEntity<List<StoicJournal>> {
         val user = customUserRepository.findById(userId).orElseThrow {
